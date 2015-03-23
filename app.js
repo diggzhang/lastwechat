@@ -15,10 +15,26 @@ var API = require('wechat-enterprise-api');
 var app = express();
 var api = new API(config.corpid, config.corpsecret, 10);
 
+var to = {
+    "touser" : "@all"
+};
+
+var message = {
+    "msgtype" : "text",
+    "text" : {
+        "content" : "hello from node"
+    },
+    "safe" : "0",
+};
+
 //get user
 api.getUser('digg', function (err, data, res) {
     console.log(data);
 })
+
+api.send(to, message, function (err, data, res) {
+    console.log(data);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
