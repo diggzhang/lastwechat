@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var superagent = require('superagent');
+var cheerio = require('cheerio');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -20,22 +23,82 @@ var to = {
 };
 
 var message = {
-    "msgtype" : "text",
-    "text" : {
-        "content" : "hello from node"
+    "msgtype" : "news",
+    "news" : {
+        "articles" : [
+            {
+                "title":"Title",
+                "description":"Description",
+                "url":"URL",
+                "picurl":"PIC_URL",
+            },
+            {
+                "title":"Title",
+                "description":"Description",
+                "url":"URL",
+                "picurl":"PIC_URL",
+            }
+        ]
     },
-    "safe" : "0",
+    "safe" : "0"
 };
+
+//message.text["content"] = "get rss message";
+
+//Spider
+
+var getRss = function (cb) {
+superagent.get('https://cnodejs.org/')
+    .end(function (err, sres) {
+        if (err) {
+            return next(err);
+        };
+
+        var $ = cheerio.load(sres.text);
+        var items = [];
+        
+        $('#topic_list .topic_title').each(function (idx, element) {
+            var $element = $(element);
+            items.push({
+                title: $element.attr('title'),
+                href: $element.attr('href')
+            });
+        });
+        cb(items);
+    })
+}
+
+getRss(function (rss) {
+   // console.log(rss);
+   //message.text.content = rss[0].title + "<br>"  + rss[1].title + "<br>" + rss[2].title;
+    var cnodejsUrl = "https://cnodejs.org";
+    message.news.articles[0].title = rss[0].title;
+    message.news.articles[0].url = cnodejsUrl+rss[0].href;
+    message.news.articles[1].title = rss[1].title;
+    message.news.articles[1].url = cnodejsUrl+rss[1].href;
+
+    console.log(message.news.articles[0].url);
+    console.log(message.news.articles[1].url);
+    api.send(to, message, function (err, data, res) {
+        if (err) {
+            console.error(err);
+        };
+    });
+});
+
 
 //get user
 api.getUser('digg', function (err, data, res) {
-    console.log(data);
+//    console.log(data);
 })
 
+//push message
+/*
 api.send(to, message, function (err, data, res) {
-    console.log(data);
+//    console.log(data);
+    console.log(message.text["content"]);
 });
-
+*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
