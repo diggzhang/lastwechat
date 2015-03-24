@@ -30,25 +30,27 @@ var message = {
                 "title":"Title",
                 "description":"Description",
                 "url":"URL",
-                "picurl":"PIC_URL",
+                "picurl":"http://i-store.qiniudn.com/RSbgrLMmjaDOieNPufTw.png",
             },
             {
                 "title":"Title",
                 "description":"Description",
                 "url":"URL",
-                "picurl":"PIC_URL",
+                "picurl":"http://i-store.qiniudn.com/eaTwVWYUMlKFmufkynXh.png",
             }
         ]
     },
     "safe" : "0"
 };
 
+var cnodejsUrl = "https://cnodejs.org";
+var logdownUrl = "http://diggzhang.logdown.com";
 //message.text["content"] = "get rss message";
 
 //Spider
 
 var getRss = function (cb) {
-superagent.get('https://cnodejs.org/')
+superagent.get(cnodejsUrl)
     .end(function (err, sres) {
         if (err) {
             return next(err);
@@ -71,11 +73,15 @@ superagent.get('https://cnodejs.org/')
 getRss(function (rss) {
    // console.log(rss);
    //message.text.content = rss[0].title + "<br>"  + rss[1].title + "<br>" + rss[2].title;
-    var cnodejsUrl = "https://cnodejs.org";
-    message.news.articles[0].title = rss[0].title;
-    message.news.articles[0].url = cnodejsUrl+rss[0].href;
-    message.news.articles[1].title = rss[1].title;
-    message.news.articles[1].url = cnodejsUrl+rss[1].href;
+    random_numberA = parseInt(Math.random()*6 + 1);
+    random_numberB = parseInt(Math.random()*6 + 1);
+    if(random_numberA == random_numberB) {
+        rtandom_numberB = parseInt(Math.random()*6 + 1);
+    }
+    message.news.articles[0].title = rss[random_numberA].title;
+    message.news.articles[0].url = cnodejsUrl+rss[random_numberA].href;
+    message.news.articles[1].title = rss[random_numberB].title;
+    message.news.articles[1].url = cnodejsUrl+rss[random_numberB].href;
 
     console.log(message.news.articles[0].url);
     console.log(message.news.articles[1].url);
