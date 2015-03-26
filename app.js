@@ -30,13 +30,13 @@ var message = {
                 "title":"Title",
                 "description":"Description",
                 "url":"URL",
-                "picurl":"http://i-store.qiniudn.com/RSbgrLMmjaDOieNPufTw.png",
+                "picurl":"http://i-store.qiniudn.com/RSbgrLMmjaDOieNPufTw.png"
             },
             {
                 "title":"Title",
                 "description":"Description",
                 "url":"URL",
-                "picurl":"http://i-store.qiniudn.com/eaTwVWYUMlKFmufkynXh.png",
+                "picurl":"http://i-store.qiniudn.com/eaTwVWYUMlKFmufkynXh.png"
             }
         ]
     },
@@ -59,10 +59,7 @@ superagent.get(cnodejsUrl)
         var $ = cheerio.load(sres.text);
         var items = [];
         
-        $('#topic_list .topic_title').each(function (idx, element) {
-            var $element = $(element);
-            items.push({
-                title: $element.attr('title'),
+        $('#topic_list .topic_title').each(function (idx, element) { var $element = $(element); items.push({ title: $element.attr('title'),
                 href: $element.attr('href')
             });
         });
@@ -76,7 +73,7 @@ getRss(function (rss) {
     random_numberA = parseInt(Math.random()*6 + 1);
     random_numberB = parseInt(Math.random()*6 + 1);
     if(random_numberA == random_numberB) {
-        rtandom_numberB = parseInt(Math.random()*6 + 1);
+        random_numberB = parseInt(Math.random()*6 + 1);
     }
     message.news.articles[0].title = rss[random_numberA].title;
     message.news.articles[0].url = cnodejsUrl+rss[random_numberA].href;
